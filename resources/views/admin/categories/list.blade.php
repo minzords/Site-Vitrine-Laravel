@@ -1,0 +1,53 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Les Categories') }}
+            </h2>
+            <a href="{{ route('categories.create') }}" class="ml-auto">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md">Ajouter</button>
+            </a>
+        </div>
+    </x-slot>
+
+
+    @if (session('Succès'))
+        <div class="bg-green-500 text-white px-4 py-2 rounded-md mx-auto w-2/4 mt-4 flex items-center justify-between">
+            <div>{{ session('Succès') }}</div>
+            <button type="button" class="text-white text-sm" onclick="this.parentElement.style.display = 'none'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                    <path
+                        d="M12.02 10l6-6L16 2l-6 6l-6-6L3.98 4l6 6l-6 6l1.02 1.02l6-6l6 6L16 16l-6-6z" />
+                </svg>
+            </button>
+        </div>
+    @endif
+
+    <div class="py-12 max-w-7xls mx-auto sm:px-6 lg:px-8">
+        <div class="overflow-x-auto bg-white dark:bg-gray-800 sm:px-12 sm:rounded-lg p-6">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2 dark:text-white w-10/12">Nom</th>
+                        <th class="px-4 py-2 dark:text-white w-1/12">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($categories as $categorie)
+                        <tr>
+                            <td class="border px-4 py-2 dark:text-white  text-center">{{ $categorie->nom }}</td>
+                            <td class="border px-4 py-2 whitespace-nowrap">
+                                <a href="{{ route('categories.edit', $categorie->id) }}">
+                                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md">Modifier</button>
+                                </a>
+                                <a href="{{ route('categories.delete', $categorie->id) }}">
+                                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md">Supprimer</button>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</x-app-layout>
