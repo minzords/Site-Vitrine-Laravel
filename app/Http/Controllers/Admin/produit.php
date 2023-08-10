@@ -6,8 +6,10 @@ use App\Models\Produits;
 use App\Models\Categorie;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class produit extends Controller
@@ -76,6 +78,66 @@ class produit extends Controller
 
         return redirect()->route('product.list')->with('Succès', 'Le produit a bien été créée');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Edit
+    |--------------------------------------------------------------------------
+    |
+    | It return the view 'admin.produit.edit' (The form to edit a product)
+    |
+    */
+    public function edit(int $id): View
+    {
+        $produit = Produits::findorfail($id);
+        $categories = Categorie::all();
+
+
+        return view('admin.produit.edit', compact('produit', 'categories'));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Store Update Article
+    |--------------------------------------------------------------------------
+    |
+    | It update the product with the data from the form and redirect to the
+    | route 'product.list'
+    |
+    */
+    public function store_article(Request $request) {
+        $validatedData = $request->validate([
+            'nom' => 'required',
+            'category' => 'required',
+        ]);
+
+        $update = DB::table('produits')
+            ->where('id', $request->id)
+            ->update([
+                'nom' => $request->nom,
+            ]);
+
+        // TODO Not working yet, need to fix it
+        $update_category = DB::table('categorie_produit')
+            ->where('produits_id', $request->id)
+            ->update([
+                'categorie_id' => $request->category,
+            ]);
+
+        if ($request->hasFile('image')) {
+            $name = Storage::put('public/produits', $request->file('image'));
+            $name = str_replace('public/', 'storage/', $name);
+
+            $update_picture = DB::table('produits')
+                ->where('id', $request->id)
+                ->update([
+                    'photo' => $name,
+                ]);
+        }
+
+        return (Redirect::route('product.list')->with('Succès', 'Le produit a bien été modifié'));
+    }
+
 
     /*
     |--------------------------------------------------------------------------

@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function ()
     Route::get('/admin/products/create', [AdminProduit::class, 'create'])->name('product.create');
     Route::post('/admin/products/store', [AdminProduit::class, 'store'])->name('product.store');
     Route::get('/admin/products/{id}/edit', [AdminProduit::class, 'edit'])->name('product.edit');
+    Route::post('/admin/products/{id}/edit', [AdminProduit::class, 'store_article'])->name('product.edit.store');
     Route::get('/admin/products/{id}/delete', [AdminProduit::class, 'delete'])->name('product.delete');
     // Categories
     Route::get('/admin/categories', [AdminCategorie::class, 'index'])->name('categories.list');
