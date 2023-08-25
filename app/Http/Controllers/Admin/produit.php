@@ -59,7 +59,7 @@ class produit extends Controller
         $validatedData = $request->validate([
             'nom' => 'required',
             'category' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg,webp,avif|max:4096'
         ]);
 
         // Upload de l'image    
@@ -109,9 +109,10 @@ class produit extends Controller
         $validatedData = $request->validate([
             'nom' => 'required',
             'category' => 'required',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg,webp,avif|max:4096'
         ]);
 
-        $update = DB::table('produits')
+        $update = DB::table('produits') 
             ->where('id', $request->id)
             ->update([
                 'nom' => $request->nom,
